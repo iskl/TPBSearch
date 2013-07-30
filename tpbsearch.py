@@ -4,6 +4,7 @@
 import argparse
 import urllib2
 from bs4 import BeautifulSoup
+import transmissionrpc
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Advanced Search for ThePirateBay.")
@@ -12,6 +13,8 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--depth", metavar="DEPTH", default="10", type=int,
                         help="The number of pages to be searched (default 10)")
     args = parser.parse_args()
+
+    tc= transmissionrpc.Client('localhost', port=8091, user='transmission', password='0missions')
 
     torrents = []
     for i in range(args.depth):
@@ -55,3 +58,4 @@ if __name__ == "__main__":
         print torrent["title"]
         print "    author: " + torrent["author"]
         print "    " + torrent["magnet"]
+        tc.add_torrent(torrent["magnet"])
